@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1F7A6D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PCOD Plan">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PCOD Weight-Loss Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F2F7;--card:#FFFFFF;--ink:#2A2233;--mute:#6B6275;--line:#E3DDE9;--teal:#1F7A6D;--plum:#6B3F8C;--amber:#C9822B;--red:#B5412F;--redbg:#FBEAE6;--tealbg:#E4F2EF;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1B1722;--card:#251F2E;--ink:#EFE9F5;--mute:#A79DB4;--line:#3A3247;--teal:#4FC3B0;--plum:#B58AD8;--amber:#E5A24D;--red:#EF8A78;--redbg:#3A2420;--tealbg:#1D3532}}
+:root[data-theme="dark"]{--bg:#1B1722;--card:#251F2E;--ink:#EFE9F5;--mute:#A79DB4;--line:#3A3247;--teal:#4FC3B0;--plum:#B58AD8;--amber:#E5A24D;--red:#EF8A78;--redbg:#3A2420;--tealbg:#1D3532}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5}
+main{max-width:980px;margin:0 auto;padding:20px 16px 48px}
+h1,h2,h3{font-family:'Bricolage Grotesque','DM Sans',sans-serif;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(1.7rem,5vw,2.4rem);line-height:1.1}
+h2{font-size:1.25rem;margin-bottom:12px}
+.sub{color:var(--mute);margin:6px 0 20px;max-width:60ch}
+.grid{display:grid;gap:14px}
+.stats{grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.stat b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:1.6rem}
+.stat span{color:var(--mute);font-size:.85rem}
+section{margin-top:26px}
+.hero{display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:20px;align-items:center}
+@media(max-width:640px){.hero{grid-template-columns:1fr}}
+.donut{position:relative;width:100%;max-width:240px;margin:0 auto}
+.donut svg{width:100%;height:auto;transform:rotate(-90deg)}
+.donut .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.mid b{font-family:'Bricolage Grotesque',sans-serif;font-size:2rem;line-height:1}
+.mid span{color:var(--mute);font-size:.8rem}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:14px;flex-wrap:wrap}
+.seg button{font:inherit;background:transparent;color:var(--ink);border:0;padding:8px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--teal);color:#fff}
+button:focus-visible{outline:3px solid var(--plum);outline-offset:2px}
+.macro{margin:10px 0}
+.macro .row{display:flex;justify-content:space-between;font-weight:500}
+.macro .row small{color:var(--mute);font-weight:400}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;border-radius:6px}
+.meals{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.meals .card b{display:block}
+.meals .card span{color:var(--mute);font-size:.85rem}
+.days{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
+.days button{font:inherit;flex:0 0 auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;text-align:left}
+.days button[aria-pressed="true"]{background:var(--plum);color:#fff;border-color:var(--plum)}
+.days small{display:block;opacity:.8}
+table{width:100%;border-collapse:collapse}
+td,th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line);font-size:.95rem}
+th{color:var(--mute);font-weight:500}
+.wrap{overflow-x:auto}
+.two{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.limit li,.keep li{margin:7px 0}
+ul{padding-left:18px;margin:0}
+.avoid{background:var(--redbg);border-color:transparent}
+.avoid h3{color:var(--red)}
+.keep{background:var(--tealbg);border-color:transparent}
+.keep h3{color:var(--teal)}
+.avoid li span,.keep li span{color:var(--mute)}
+.note{color:var(--mute);font-size:.85rem;margin-top:26px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.chips button{font:inherit;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:6px 14px;cursor:pointer}.chips button[aria-pressed="true"]{background:var(--teal);color:#fff;border-color:var(--teal)}
+td a{color:var(--plum);font-weight:500}
+.check{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);cursor:pointer}.check input{width:20px;height:20px;accent-color:var(--teal)}
+.dots{display:flex;gap:8px;margin:12px 0}.dots div{flex:1;text-align:center;font-size:.8rem;color:var(--mute)}.dots i{display:block;height:26px;border-radius:7px;background:var(--teal);margin-bottom:4px}
+input[type=date],input[type=number]{font:inherit;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px;max-width:100%}
+.save{font:inherit;background:var(--teal);color:#fff;border:0;border-radius:8px;padding:9px 16px;cursor:pointer}
+.form{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:12px}.form label{display:flex;flex-direction:column;font-size:.85rem;color:var(--mute);gap:4px}
+</style>
+</head>
+<body>
+<main>
+<h1>PCOD weight-loss plan</h1>
+<p class="sub">Daily targets, a weekly workout and what to limit. Built for a 165 cm, 69 kg starting point, aiming for a slow loss of about 0.25 to 0.5 kg a week.</p>
+
+<div class="grid stats">
+  <div class="card stat"><b>~25</b><span>current BMI</span></div>
+  <div class="card stat"><b>62-65 kg</b><span>first goal (5-10% loss)</span></div>
+  <div class="card stat"><b>8-10k</b><span>steps per day</span></div>
+  <div class="card stat"><b>2.5-3 L</b><span>water per day</span></div>
+  <div class="card stat"><b>7-9 h</b><span>sleep per night</span></div>
+</div>
+
+<section>
+<h2>Daily nutrition targets</h2>
+<div class="card">
+  <div class="seg" role="group" aria-label="Calorie target">
+    <button data-k="1500" aria-pressed="false">1,500 kcal</button>
+    <button data-k="1600" aria-pressed="true">1,600 kcal</button>
+    <button data-k="1700" aria-pressed="false">1,700 kcal</button>
+  </div>
+  <p class="sub" style="margin-top:0" id="hint"></p>
+  <div class="hero">
+    <div class="donut">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="46" fill="none" stroke="var(--line)" stroke-width="16"/><g id="arcs"></g></svg>
+      <div class="mid"><b id="kcal">1600</b><span>kcal / day</span></div>
+    </div>
+    <div>
+      <div class="macro"><div class="row"><span>Protein <small id="pPct"></small></span><b id="p"></b></div><div class="bar"><i id="pb" style="background:var(--teal)"></i></div></div>
+      <div class="macro"><div class="row"><span>Carbs <small id="cPct"></small></span><b id="c"></b></div><div class="bar"><i id="cb" style="background:var(--plum)"></i></div></div>
+      <div class="macro"><div class="row"><span>Fats <small id="fPct"></small></span><b id="f"></b></div><div class="bar"><i id="fb" style="background:var(--amber)"></i></div></div>
+      <div class="macro"><div class="row"><span>Fibre <small>minimum</small></span><b>25-30 g</b></div><div class="bar"><i style="background:var(--mute);width:80%"></i></div></div>
+    </div>
+  </div>
+</div>
+<div class="grid meals" style="margin-top:14px" id="meals"></div>
+</section>
+
+<section>
+<h2>Weekly workout</h2>
+<div class="days" id="days" role="group" aria-label="Workout day"></div>
+<div class="card"><h3 id="wTitle"></h3><p class="sub" id="wNote" style="margin:4px 0 10px"></p><div class="wrap"><table><thead><tr><th>Exercise</th><th>Sets x reps</th><th>Video</th></tr></thead><tbody id="wRows"></tbody></table></div></div>
+</section>
+
+<section>
+<h2>Foods to eat</h2>
+<p class="sub" style="margin-top:-4px">Approximate values per serving. Cooked weights unless noted. Brands and recipes vary.</p>
+<div class="chips" id="chips" role="group" aria-label="Food group"></div>
+<div class="card"><div class="wrap"><table><thead><tr><th>Food and serving</th><th>kcal</th><th>Protein</th><th>Carbs</th><th>Fibre</th></tr></thead><tbody id="foods"></tbody></table></div></div>
+</section>
+
+<section>
+<h2>Daily tracker</h2>
+<div class="card">
+<div class="form"><label>Date<input type="date" id="tdate"></label><span id="tprog" style="font-weight:500"></span></div>
+<div id="checks"></div>
+<p class="sub" style="margin:14px 0 0">Last 7 days (darker means more habits ticked)</p>
+<div class="dots" id="dots"></div>
+</div>
+<div class="card" style="margin-top:14px"><h3 style="margin-bottom:10px">Weight and waist log</h3>
+<div class="form"><label>Weight (kg)<input type="number" id="lw" step="0.1" min="30" max="200"></label><label>Waist (cm)<input type="number" id="lc" step="0.5" min="40" max="200"></label><button class="save" id="lsave">Save entry</button></div>
+<p class="sub" id="lsum" style="margin:0 0 8px"></p>
+<div class="wrap"><table><thead><tr><th>Date</th><th>Weight</th><th>Waist</th></tr></thead><tbody id="lrows"></tbody></table></div>
+<p class="note" style="margin-top:10px">Weigh once a week, same time, same scale.</p>
+</div>
+</section>
+
+<section>
+<h2>What to limit and what to keep</h2>
+<div class="grid two">
+  <div class="card avoid"><h3>Limit or avoid</h3><ul class="limit">
+    <li>Sugary drinks, fruit juice, sweet chai and coffee <span>(swap for water, buttermilk, spearmint or green tea)</span></li>
+    <li>Maida, bakery items, biscuits and packaged snacks</li>
+    <li>Deep-fried food and street snacks</li>
+    <li>Large portions of white rice or plain potato</li>
+    <li>Crash diets, skipped meals and long fasts <span>(raise stress hormones)</span></li>
+    <li>Daily HIIT or workouts on little sleep</li>
+    <li>Late-night heavy meals and screens before bed</li>
+    <li>Smoking and regular alcohol</li>
+    <li>Starting supplements or medication without your doctor</li>
+  </ul></div>
+  <div class="card keep"><h3>Keep doing</h3><ul>
+    <li>Protein in every meal and snack</li>
+    <li>Vegetables and protein first, carbs last</li>
+    <li>A 10-15 minute walk after meals</li>
+    <li>Jowar, bajra, ragi, oats, millets and whole wheat</li>
+    <li>Nuts, seeds, flax and fatty fish for healthy fats</li>
+    <li>Strength training 3 days a week</li>
+    <li>A fixed sleep and wake time</li>
+    <li>10 minutes a day to wind down: breathing, a walk or journaling</li>
+    <li>Tracking waist, cycle regularity and energy, not just the scale</li>
+  </ul></div>
+</div>
+</section>
+
+<section>
+<h2>Ask your doctor about</h2>
+<div class="card">Fasting glucose and insulin (or HbA1c), lipid profile, thyroid (TSH), prolactin, vitamin D, B12 and hormone levels. Based on results, a doctor may suggest metformin, myo-inositol or vitamin D.</div>
+</section>
+
+<p class="note">These are general estimates, not medical advice. Your needs vary with age, activity and test results, so check the plan with your gynecologist or a registered dietitian. If you lose weight faster than 0.5 kg a week, eat a bit more.</p>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const hints={1500:'Lower end. Good if you are mostly desk-based and want steadier loss.',1600:'Balanced default for most days with strength training and walking.',1700:'Higher end. Use on heavy training days or if you feel drained at 1,600.'};
+function render(k){
+  k=+k;const p=100,f=Math.round(k*.32/9),c=Math.round((k-p*4-f*9)/4);
+  $('kcal').textContent=k.toLocaleString();$('hint').textContent=hints[k];
+  $('p').textContent=p+' g (85-110)';$('c').textContent=c+' g';$('f').textContent=f+' g';
+  const pk=p*4,ck=c*4,fk=f*9,t=pk+ck+fk;
+  [['pPct',pk],['cPct',ck],['fPct',fk]].forEach(([id,v])=>$(id).textContent=Math.round(v/t*100)+'% of kcal');
+  $('pb').style.width=Math.round(pk/t*100*2)+'%';$('cb').style.width=Math.round(ck/t*100*1.6)+'%';$('fb').style.width=Math.round(fk/t*100*2.6)+'%';
+  const C=2*Math.PI*46,cols=['var(--teal)','var(--plum)','var(--amber)'];let off=0;
+  $('arcs').innerHTML=[pk,ck,fk].map((v,i)=>{const l=v/t*C,s=`<circle cx="60" cy="60" r="46" fill="none" stroke="${cols[i]}" stroke-width="16" stroke-dasharray="${l-1.5} ${C-l+1.5}" stroke-dashoffset="${-off}"/>`;off+=l;return s}).join('');
+  const m=[['Breakfast',.25,'Chilla or eggs, curd'],['Lunch',.3,'Roti or millet, dal, sabzi'],['Snack',.15,'Chana, nuts, buttermilk'],['Dinner',.3,'Paneer, chicken or fish, veg']];
+  $('meals').innerHTML=m.map(([n,r,e])=>`<div class="card"><b>${n}</b><span>~${Math.round(k*r/5)*5} kcal, ${Math.round(p*r)} g protein</span><br><span>${e}</span></div>`).join('');
+}
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));render(b.dataset.k)});
+render(1600);
+
+const W=[
+{d:'Mon',t:'Lower body strength',n:'45 min. Rest 60-90 sec between sets. Pick weights where the last 2 reps are hard.',r:[['Goblet squat','3 x 12'],['Romanian deadlift','3 x 10'],['Walking lunges','3 x 10 each leg'],['Glute bridge','3 x 15'],['Plank','3 x 30 sec']]},
+{d:'Tue',t:'Brisk walk or cycling',n:'30-45 min at a pace where you can talk but not sing.',r:[['Brisk walk, cycle or swim','30-45 min'],['Stretching','5-10 min']]},
+{d:'Wed',t:'Upper body strength',n:'40-45 min. Start with light dumbbells or resistance bands.',r:[['Dumbbell shoulder press','3 x 10'],['One-arm row','3 x 12 each'],['Incline push-up','3 x 8-12'],['Lat pulldown or band pull','3 x 12'],['Biceps and triceps curls','2 x 12 each']]},
+{d:'Thu',t:'Yoga and recovery',n:'30 min. Slow flow, deep breathing, hip openers. Good for stress.',r:[['Gentle yoga flow','20-30 min'],['Breathing (box or alternate nostril)','5-10 min']]},
+{d:'Fri',t:'Full body strength',n:'45 min. Same effort rule as Monday.',r:[['Deadlift (light to moderate)','3 x 8'],['Step-ups','3 x 10 each leg'],['Dumbbell bench or floor press','3 x 10'],['Seated cable or band row','3 x 12'],['Farmer carry','3 x 30 sec']]},
+{d:'Sat',t:'Cardio and optional intervals',n:'40 min. One short interval block at most, skip it if you slept badly.',r:[['Easy cardio warm-up','10 min'],['Intervals: 30 sec fast, 90 sec easy (optional)','6-8 rounds'],['Cool-down walk','10 min']]},
+{d:'Sun',t:'Rest and light walk',n:'Walk 20-30 min, prep meals for the week and sleep well.',r:[['Easy walk','20-30 min'],['Meal prep and planning','Optional']]}];
+const days=$('days');
+W.forEach((w,i)=>{const b=document.createElement('button');b.innerHTML=`${w.d}<small>${w.t.split(' ')[0]}</small>`;b.setAttribute('aria-pressed',i===0);b.onclick=()=>{[...days.children].forEach(x=>x.setAttribute('aria-pressed',x===b));show(i)};days.appendChild(b)});
+function show(i){const w=W[i];$('wTitle').textContent=w.t;$('wNote').textContent=w.n;$('wRows').innerHTML=w.r.map(([a,b])=>`<tr><td>${a}</td><td>${b}</td><td><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(a.replace(/\(.*?\)/g,'')+' how to')}" target="_blank" rel="noopener">Watch</a></td></tr>`).join('')}
+show(0);
+const F=[
+['Protein','Eggs, 2 large',150,12,1,0],['Protein','Paneer, 100 g',265,18,3,0],['Protein','Chicken breast, 100 g',165,31,0,0],['Protein','Rohu or similar fish, 100 g',120,20,0,0],['Protein','Tofu, 100 g',76,8,2,1],['Protein','Whey protein, 1 scoop (30 g)',120,24,3,0],['Protein','Curd, 1 cup (200 g)',120,7,9,0],['Protein','Buttermilk, 1 glass',40,3,5,0],
+['Carbs','Whole wheat roti, 1 medium',100,3.5,18,3],['Carbs','Jowar or bajra roti, 1',110,3.5,23,3],['Carbs','Oats, 40 g dry',150,5,27,4],['Carbs','Brown rice or millet, 100 g',110,2.5,23,2],['Carbs','Moong dal chilla, 2 medium',200,14,28,5],['Carbs','Besan chilla, 2 medium',220,11,25,5],
+['Fibre-rich','Dal, 1 katori (150 g)',150,9,22,6],['Fibre-rich','Sprouts, 1 cup',30,3,6,2],['Fibre-rich','Leafy greens or sabzi, 1 cup',60,3,8,4],['Fibre-rich','Guava, 1 medium',68,2.5,14,5],['Fibre-rich','Apple, 1 medium',95,0.5,25,4],
+['Fats and seeds','Almonds, 10',70,2.5,2.5,1.5],['Fats and seeds','Chia seeds, 1 tbsp',58,2,5,4],['Fats and seeds','Flaxseed, 1 tbsp (ground)',55,2,3,3],['Fats and seeds','Roasted chana, 30 g',110,6,18,5]];
+const G=['All',...new Set(F.map(f=>f[0]))];let gsel='All';
+function food(){$('chips').innerHTML='';G.forEach(g=>{const b=document.createElement('button');b.textContent=g;b.setAttribute('aria-pressed',g===gsel);b.onclick=()=>{gsel=g;food()};$('chips').appendChild(b)});
+$('foods').innerHTML=F.filter(f=>gsel==='All'||f[0]===gsel).map(f=>`<tr><td>${f[1]}</td><td>${f[2]}</td><td>${f[3]} g</td><td>${f[4]} g</td><td>${f[5]} g</td></tr>`).join('')}
+food();
+let dbDoc=null;function push(){if(dbDoc)dbDoc.set({days:S,log:L}).catch(()=>{})}
+const ls={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}push()}};
+const T=[['Workout or active-rest day done'],['8-10k steps'],['2.5 L or more water'],['Hit protein target (85-110 g)'],['25 g or more fibre'],['Walked after meals'],['Slept 7+ hours'],['10 min wind-down']];
+let S=ls.get('pcodDays')||{};
+const iso=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
+$('tdate').value=iso(new Date());
+function track(){const d=$('tdate').value,done=S[d]||[];
+$('checks').innerHTML=T.map((t,i)=>`<label class="check"><input type="checkbox" data-i="${i}" ${done.includes(i)?'checked':''}><span>${t[0]}</span></label>`).join('');
+$('tprog').textContent=done.length+' of '+T.length+' done';
+document.querySelectorAll('#checks input').forEach(c=>c.onchange=()=>{const a=new Set(S[d]||[]);c.checked?a.add(+c.dataset.i):a.delete(+c.dataset.i);S[d]=[...a];ls.set('pcodDays',S);track()});
+let h='';const base=new Date(d+'T12:00:00');for(let k=6;k>=0;k--){const x=new Date(base);x.setDate(x.getDate()-k);const n=(S[iso(x)]||[]).length;h+=`<div><i style="opacity:${.12+.88*n/T.length}"></i>${x.toLocaleDateString('en',{weekday:'short'})}<br>${n}/${T.length}</div>`}
+$('dots').innerHTML=h}
+$('tdate').onchange=track;track();
+let L=ls.get('pcodLog')||[];
+function log(){const r=[...L].sort((a,b)=>b.d.localeCompare(a.d));
+$('lrows').innerHTML=r.slice(0,8).map(e=>`<tr><td>${e.d}</td><td>${e.w?e.w+' kg':'-'}</td><td>${e.c?e.c+' cm':'-'}</td></tr>`).join('')||'<tr><td colspan="3">No entries yet. Add your starting weight and waist.</td></tr>';
+const ws=[...L].filter(e=>e.w).sort((a,b)=>a.d.localeCompare(b.d));
+$('lsum').textContent=ws.length>1?'Change since first entry: '+(ws[ws.length-1].w-ws[0].w).toFixed(1)+' kg':''}
+$('lsave').onclick=()=>{const w=parseFloat($('lw').value),c=parseFloat($('lc').value);if(!w&&!c)return;const d=$('tdate').value;L=L.filter(e=>e.d!==d);L.push({d,w:w||null,c:c||null});ls.set('pcodLog',L);$('lw').value='';$('lc').value='';log()};
+log();
+
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
